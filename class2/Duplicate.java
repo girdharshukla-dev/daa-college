@@ -3,50 +3,63 @@ package class2;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class Duplicate {
     public static void main(String[] args) {
         Random random = new Random();
         int[] arr = new int[random.nextInt(10000)];
-        for(int i=0;i<arr.length;i++){
-            arr[i] = random.nextInt(10);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = random.nextInt(10); // restrict values to increase chance of duplicates
         }
         check(arr);
     }
 
-    static void check(int[] arr){
+    static void check(int[] arr) {
         long time1 = System.nanoTime();
-        System.out.println(bruteForce(arr)?"Duplicacy found":"No duplicacy");
+        System.out.println(bruteForce(arr) ? "Duplicacy found" : "No duplicacy");
         long time2 = System.nanoTime();
-        System.out.println("The time using Brute Force -------> " +(time2-time1));
-        
+        System.out.println("Time using Brute Force -------> " + (time2 - time1) + " ns");
+
         long time3 = System.nanoTime();
-        System.out.println(optimised(arr)?"Duplicacy found":"No duplicacy");
+        System.out.println(sortAndCheck(arr) ? "Duplicacy found" : "No duplicacy");
         long time4 = System.nanoTime();
-        System.out.println("The time using Optimised is -------> " +(time4-time3));
+        System.out.println("Time using O(n log n) approach -------> " + (time4 - time3) + " ns");
+
+        long time5 = System.nanoTime();
+        System.out.println(usingSet(arr) ? "Duplicacy found" : "No duplicacy");
+        long time6 = System.nanoTime();
+        System.out.println("Time using HashSet (O(n)) -------> " + (time6 - time5) + " ns");
     }
 
-    static boolean bruteForce(int[] arr){
-        Arrays.sort(arr);
-        for(int i=1;i<arr.length;i++){
-            if(arr[i] == arr[i-1]){
+    // O(n^2) brute-force
+    static boolean bruteForce(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i] == arr[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // O(n log n) approach
+    static boolean sortAndCheck(int[] arr) {
+        int[] copy = Arrays.copyOf(arr, arr.length);
+        Arrays.sort(copy);
+        for (int i = 1; i < copy.length; i++) {
+            if (copy[i] == copy[i - 1]) {
                 return true;
             }
         }
         return false;
     }
 
-    // static boolean optimised(int[] arr){
-    //    return Arrays.stream(arr).boxed().collect(Collectors.toSet()).size()<arr.length;
-    // }
-
-    static boolean optimised(int[] arr){
+    // O(n) approach using HashSet
+    static boolean usingSet(int[] arr) {
         HashSet<Integer> set = new HashSet<>();
-        for(int i : arr){
-            if(set.contains(i)){
-                return true;
-            }
+        for (int i : arr) {
+            if (set.contains(i)) return true;
             set.add(i);
         }
         return false;
