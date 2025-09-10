@@ -3,10 +3,23 @@ import java.util.HashMap;
 
 public class TwoSum {
     public static void main(String[] args) throws InterruptedException {
-        int[] arr = new int[] { 1,2,1,2,1};
+        int[] arr = new int[] { 1, 2, 1, 2, 1 };
+        long start, end;
+
+        start = System.nanoTime();
         System.out.println("Brute Force : " + bruteForce(arr, 3));
-        System.out.println("Better : " + ans(arr, 3));
+        end = System.nanoTime();
+        System.out.println("Brute Force Time: " + (end - start) + " ns");
+
+        start = System.nanoTime();
+        System.out.println("Better : " + better(arr, 3));
+        end = System.nanoTime();
+        System.out.println("Better Time: " + (end - start) + " ns");
+
+        start = System.nanoTime();
         System.out.println("Optimal  : " + optimal(arr, 3));
+        end = System.nanoTime();
+        System.out.println("Optimal Time: " + (end - start) + " ns");
     }
 
     static int bruteForce(int[] nums, int target) {
@@ -34,9 +47,9 @@ public class TwoSum {
                 int l = nums[left];
                 int r = nums[right];
                 int n = 0;
-                if(l==r){
+                if (l == r) {
                     int total = right - left + 1;
-                    n = (total * (total-1))/2;
+                    n = (total * (total - 1)) / 2;
                 }
                 while (left <= right && nums[left] == l) {
                     lc++;
@@ -67,10 +80,5 @@ public class TwoSum {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
         return count;
-    }
-
-    static int ans(int[] num , int target) throws InterruptedException{
-        Thread.sleep(5000);
-        return optimal(num, target);
     }
 }
